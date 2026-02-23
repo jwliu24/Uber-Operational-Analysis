@@ -34,3 +34,11 @@ Patience Zone (0-15 mins): Cancellation rates remain stable and low (under 10%).
 The Breaking Point (15+ mins): The customer cancellation rate spikes to 100%.
 
 Strategic Recommendation: This data proves that any booking assigned to a driver more than 15 minutes away is a guaranteed revenue loss. Operational efforts should focus on keeping "Go Sedan" arrival times under this 15-minute threshold to prevent total churn.
+
+## Week 3: Exploratory Data Analysis (EDA) & Business Impact
+In Week 3, the focus shifted from data preparation to visual storytelling and uncovering the "why" behind the revenue loss. By analyzing cancellation patterns across vehicle types, I identified a major operational bottleneck.
+
+### Key Insights
+The $1.15M 'Auto' Leakage: Contrary to assumptions that premium vehicles drive the most financial loss, the high-frequency Auto segment was identified as the platform's largest revenue leak, totaling over $1,150,000 in unrealized bookings.
+
+Pinpointing the Root Cause: A behavioral deep dive revealed a distinct UI/GPS friction point. The leading reason for customer cancellations was "Wrong address," which directly correlated with the top driver cancellation reason: "Customer related issue." * Strategic Recommendation: The data proves this is an interface problem, not a driver supply problem. Implementing a "Confirm Exact Pin" prompt or a brief address-edit window for Auto bookings could directly recover a significant portion of this lost revenue.
