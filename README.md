@@ -16,7 +16,9 @@ The project began by processing 150,000 rows of raw ride data to establish basel
 * **The Reliability Gap:** Go Sedan has the lowest reliability, with a 7.22% "No Driver Found" rate.
 * **Time Trend:** Supply shortages peak at 1:00 AM, where failure rates jump to nearly 8%.
 
-<img width="1015" height="549" alt="week 1" src="https://github.com/user-attachments/assets/b588a335-e563-4469-a3c0-ff11ba56acdb" />
+<img width="1015" height="549" alt="week 1" src="https://github.com/user-attachments/assets/6644c0b6-3eb0-4d68-ade2-f53bbc3aebb0" />
+
+*Above: A visualization of platform supply reliability across a 24-hour period. The data reveals a clear "supply wall" during late-night hours (1:00 AM - 2:00 AM) where driver availability drops significantly, resulting in an 8%+ failure rate to match a rider with a driver.*
 
 ---
 
@@ -33,9 +35,12 @@ By correlating wait times with customer cancellations, I discovered a definitive
 * **Patience Zone (0-15 mins):** Cancellation rates remain stable and low (under 10%).
 * **The Breaking Point (15+ mins):** The customer cancellation rate spikes to 100%.
 
-> **Strategic Recommendation:** This data proves that any booking assigned to a driver more than 15 minutes away is a guaranteed revenue loss. Operational efforts should focus on keeping "Go Sedan" arrival times under this 15-minute threshold to prevent total churn.
 
-<img width="969" height="573" alt="week 2" src="https://github.com/user-attachments/assets/11f5eb87-2393-4dcf-abd2-d881186d40fc" />
+<img width="969" height="573" alt="week 2" src="https://github.com/user-attachments/assets/3948f0ce-43a0-4170-bdb8-e9cbc5942b00" />
+
+*Above: An analysis of customer cancellation rates bucketed by estimated driver arrival times. The data reveals a stark "revenue cliff" at the 15-minute mark, where customer patience entirely runs out and the cancellation rate skyrockets from under 8% to exactly 100%.*
+
+> **Strategic Recommendation:** This data proves that any booking assigned to a driver more than 15 minutes away is a guaranteed revenue loss. Operational efforts should focus on keeping "Go Sedan" arrival times under this 15-minute threshold to prevent total churn.
 
 ---
 
@@ -46,9 +51,13 @@ In Week 3, the focus moved to visual storytelling and uncovering the "why" behin
 * **The $1.15M 'Auto' Leakage:** Contrary to assumptions that premium vehicles drive the most financial loss, the high-frequency Auto segment was identified as the platform's largest absolute revenue leak, totaling over $1,150,000 in unrealized bookings.
 * **Pinpointing the Root Cause:** A behavioral deep dive revealed a distinct UI/GPS friction point. The leading reason for customer cancellations was "Wrong address," which directly correlated with the top driver cancellation reason: "Customer related issue."
 
-> **Strategic Recommendation:** The data proves this is an interface problem, not a driver supply problem. Implementing a "Confirm Exact Pin" prompt or a brief address-edit window for Auto bookings could directly recover a significant portion of this lost revenue.
 
-<img width="1568" height="689" alt="week 3" src="https://github.com/user-attachments/assets/bf2d19e4-05cf-4a42-9111-9dce6e0d20aa" />
+<img width="1568" height="689" alt="week 3" src="https://github.com/user-attachments/assets/dcefb3ab-c5fb-47b2-9ddb-e5ec3ba5bf9f" />
+
+*Above: A financial breakdown of unrealized revenue across vehicle categories due to cancelled or failed rides. The data reveals that the high-frequency "Auto" segment represents the platform's most severe financial leak, accounting for over $1.15 million in lost booking value.*
+
+
+> **Strategic Recommendation:** The data proves this is an interface problem, not a driver supply problem. Implementing a "Confirm Exact Pin" prompt or a brief address-edit window for Auto bookings could directly recover a significant portion of this lost revenue.
 
 ---
 
@@ -59,4 +68,53 @@ The final phase shifted from visual exploration to rigorous mathematical validat
 * **The 'Auto' Leakage Reality Check (Chi-Square Test):** While EDA highlighted the Auto segment as the largest absolute revenue leak, a Chi-Square test of independence (p = 0.89) revealed no statistically significant relationship between vehicle type and cancellation rates. This mathematically proves that the "Wrong Address" UI friction is a platform-wide issue affecting all rides equally, rather than a problem isolated to a specific vehicle tier.
 * **Validating Peak Revenue Drivers (Two-Sample T-Test):** A Two-Sample T-Test was deployed to compare average booking values between rush hour and off-peak times. This mathematically validated that time-of-day operations significantly drive up average ticket sizes, confirming that temporal features are highly reliable indicators for future predictive modeling.
 
+
+### 1. Chi-Square Test: Testing the "Day of the Week" Factor
+<img width="470" height="186" alt="week 4 chi-test" src="https://github.com/user-attachments/assets/2a0ee554-ff2f-49c6-b5a3-6cc4250e0f9e" />
+
+*Above: Execution of a Chi-Square Test of Independence using Python's SciPy library. With a resulting p-value of 0.402 (well above the 0.05 threshold), this test mathematically proves that the overall proportion of cancelled rides is practically identical regardless of whether the booking occurs on a weekday or a weekend.*
+
+
+
+### 2. Two-Sample T-Test: Validating the "Wait Time" Factor
+<img width="509" height="157" alt="week 4 t-test" src="https://github.com/user-attachments/assets/395fd1b6-6212-430a-ac9e-95cf76586eff" />
+
+*Above: Execution of an independent Two-Sample T-Test comparing the average wait time (VTAT) of completed rides versus cancelled rides. The resulting p-value of 0.0 mathematically proves that customers who cancel experience a statistically significant longer wait time, establishing the foundational metric for our predictive ML model in Week 5.*
+
+
 > **Strategic Recommendation:** Although the statistical data proves the UI/GPS bug affects all vehicle types equally, product and engineering teams must still prioritize deploying the interface fix to the Auto segment first. Because Auto commands the highest booking volume, targeting this segment will yield the highest absolute dollar recovery and maximize the immediate ROI of the engineering effort.
+
+---
+
+## Week 5: Predictive Modeling & Machine Learning
+The final phase of the project transitioned from statistical validation to predictive modeling. I built a machine learning pipeline designed to predict customer-initiated cancellations before they happen, allowing the business to shift from reactive analysis to proactive retention.
+
+### Key Technical Accomplishments
+* **Tackling Severe Class Imbalance:** Customer cancellations represent only ~7% of all rides. I applied `class_weight='balanced'` to the models to ensure they correctly identified the minority class instead of defaulting to "Success" predictions.
+* **Optimizing for Business Value:** Rather than focusing on overall accuracy, I prioritized **Recall** (66.9% for Logistic Regression). In this context, a False Negative (missing a cancellation) costs the company a full fare, making high Recall the most critical metric for revenue recovery.
+* **Feature Integration:** Engineered and deployed 39 features, including categorical location flags, time-of-day buckets, and temporal pressure signals.
+
+
+<img width="1127" height="884" alt="week 5 step 6" src="https://github.com/user-attachments/assets/63e9e856-c50e-49b2-954d-db9a37a446be" />
+
+*Above: A heatmap of customer cancellation rates by hour and day. While the baseline is ~7%, the data reveals "hot zones" during weekday rush hours (e.g., Friday at 23:00 hitting 10%), pinpointing the temporal volatility of customer friction.*
+
+<br>
+
+<img width="984" height="384" alt="week 5 step 11" src="https://github.com/user-attachments/assets/4309033a-245e-440e-910c-5f01d03cdce1" />
+
+*Above: A comparative analysis of Logistic Regression versus Decision Tree performance. By prioritizing Recall over Accuracy, we ensured the model is tuned to identify the maximum number of potential cancellations.*
+
+<br>
+
+<img width="984" height="684" alt="week 5 step 12" src="https://github.com/user-attachments/assets/964e3ebc-9b05-455a-9ed2-b95e79953520" />
+
+*Above: The "Smoking Gun" — Feature Importance analysis. The model reveals that **Avg VTAT** (Wait Time) accounted for **99.65%** of predictive power, mathematically proving that wait time is the singular driver of customer churn, regardless of location or vehicle tier.*
+
+
+> **Strategic Recommendation:** The machine learning pipeline identifies a critical "Patience Threshold" for the platform. To minimize revenue leakage, the engineering team should operationalize these results through an **Automated Retention Trigger**: 
+> * When a live booking's estimated VTAT crosses the identified high-risk threshold (15+ mins), the app should automatically trigger a loyalty-point incentive or a small discount. 
+> * This proactive intervention targets the exact 0.35% of variance not explained by wait time, incentivizing the customer to wait and recovering what would otherwise be a guaranteed cancellation.
+
+---
+
