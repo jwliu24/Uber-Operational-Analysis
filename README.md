@@ -118,3 +118,32 @@ The final phase of the project transitioned from statistical validation to predi
 
 ---
 
+## Week 6: Product Analytics & Operations Performance
+The final phase moved beyond predictive modeling into deep product analytics. By constructing conversion funnels, tracking cohort retention, and analyzing revenue distribution, I transitioned the focus from identifying what happened to quantifying the exact business impact and prioritizing engineering efforts.
+
+### Key Insights
+* **The 62% Completion Bottleneck:** Funnel analysis revealed that for every 100 rides requested, only 62 are successfully completed. 
+* **The 'Smoking Gun' of Driver Churn:** Driver-initiated cancellations account for a massive 18% drop-off in the conversion funnel, causing nearly 3x more operational damage to the platform than customer-initiated cancellations.
+* **The Pricing Paradox:** Average Revenue Per Ride (ARPR) remains completely flat (~₹508) across all vehicle types. The data proves there is currently no effective pricing premiumization for higher-tier vehicles like the Premier Sedan or Uber XL.
+* **Platform Loyalty Pulse:** While the overall market is heavily dominated by one-time bookings, Daily Active User (DAU) tracking and cohort analysis revealed a steady, recurring pulse of ~411 active users, indicating a mature, steady-state demand rather than a hyper-growth phase.
+
+<img width="1550" height="614" alt="week 6 conversion" src="https://github.com/user-attachments/assets/3ceadfb0-e7e9-411b-ad65-41304697eee0" />
+
+*Above: A conversion funnel mapping the lifecycle of a ride request. The visualization exposes the platform's most critical operational leak: an 18% drop-off caused specifically by driver cancellations after a match has been made.*
+
+<br>
+
+<img width="1384" height="484" alt="week 6 stacked" src="https://github.com/user-attachments/assets/2dbd6a10-a678-438b-a85d-305de269c1ae" />
+
+*Above: Monthly ride volume stacked by final booking outcome. This reveals that while top-of-funnel demand remains stable at roughly 12,500 rides per month, the proportion of "lost" rides fluctuates, highlighting periods of severe driver under-supply and operational friction.*
+
+<br>
+
+<img width="1119" height="684" alt="week 6 heatmap" src="https://github.com/user-attachments/assets/e01ed548-2863-4d53-9c0f-a6bb2817b169" />
+
+*Above: A monthly cohort retention heatmap tracking user return rates. This analysis establishes a baseline for platform loyalty and proves the necessity of shifting business focus from expensive new-user acquisition to retaining the existing user base.*
+
+> **Strategic Recommendation:** The product and operations teams must pivot their immediate focus away from top-of-funnel user acquisition and toward **Match-to-Ride Success**. Because driver cancellations (18%) are the primary systemic bottleneck, the highest ROI for the engineering team will be investigating driver incentive alignment (e.g., targeted acceptance bonuses for high-traffic zones) and fixing the flat pricing model to properly monetize premium vehicle tiers.
+
+---
+
