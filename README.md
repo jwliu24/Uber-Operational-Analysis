@@ -9,6 +9,14 @@
 
 ---
 
+## Executive Summary (TL;DR)
+* **The 62% Completion Bottleneck:** Funnel analysis revealed that out of every 100 rides requested, only 62 are successfully completed.
+* **The 'Smoking Gun' of Driver Churn:** Driver-initiated cancellations account for a massive 18% drop-off in the conversion funnel, causing nearly 3x more operational damage to the platform than customer-initiated cancellations.
+* **Root Cause Fixes:** 78% of customer-initiated cancellations stem from identifiable and fixable UX or operational friction points (e.g., "Wrong Address" or "Driver Not Moving"), offering immediate, high-ROI engineering opportunities.
+* **Data Empathy:** Advanced EDA revealed that the predictive machine learning models heavily indexed on synthetic data artifacts (like artificial wait-time caps), proving the necessity of bounding ML deployments with live operational context.
+
+---
+
 ## Week 1: Data Cleaning & The "Supply Wall"
 The project began by processing 150,000 rows of raw ride data to establish baseline reliability metrics and engineer foundational time-based features (Peak vs. Off-Peak).
 
@@ -115,6 +123,8 @@ The final phase of the project transitioned from statistical validation to predi
 > **Strategic Recommendation:** The machine learning pipeline identifies a critical "Patience Threshold" for the platform. To minimize revenue leakage, the engineering team should operationalize these results through an **Automated Retention Trigger**: 
 > * When a live booking's estimated VTAT crosses the identified high-risk threshold (15+ mins), the app should automatically trigger a loyalty-point incentive or a small discount. 
 > * This proactive intervention targets the exact 0.35% of variance not explained by wait time, incentivizing the customer to wait and recovering what would otherwise be a guaranteed cancellation.
+>
+> **Analyst's Note on Model Limits:** While this ML model heavily indexes on the 15-minute threshold, deep-dive analytics in Week 7 reveal this specific cutoff is a structural artifact of the synthetic dataset. This highlights a critical lesson: deploying ML models without questioning the operational data generation process can lead to flawed automation.
 
 ---
 
