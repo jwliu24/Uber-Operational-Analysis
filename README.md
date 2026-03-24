@@ -147,3 +147,49 @@ The final phase moved beyond predictive modeling into deep product analytics. By
 
 ---
 
+## Week 7: Executive Report & Final Recommendations
+The project concluded with a synthesized findings report designed for product and operations stakeholders. This final phase translated the exploratory, statistical, and predictive insights into three concrete business recommendations, while critically evaluating the limitations of the dataset.
+
+### 1. The Largest Leak: Driver Cancellations (18%)
+Driver-initiated cancellations after a match is made account for 18% of all bookings (27,000 rides). This is the single largest category of ride loss in the dataset—larger than customer cancellations, no-driver events, and incomplete rides combined. The month-over-month rate is highly stable (17.6%–18.6%), indicating a structural, systemic issue rather than a seasonal anomaly.
+* **Recommendation:** Implement a targeted Driver Performance Programme. Track cancellation rates at the individual driver level and engage the highest-cancelling cohorts to align incentives. *(Owner: Driver Operations)*
+
+<img width="1186" height="387" alt="week 7 driver" src="https://github.com/user-attachments/assets/24c7f80a-30c2-45da-bdb1-fde0e12d1430" />
+
+*Above: A comparative breakdown of ride loss by category. The data reveals that driver-initiated cancellations account for a massive 18% of all bookings (27,000 rides), making it the single largest operational leak on the platform—exceeding customer cancellations and unfulfilled matches combined.*
+
+### 2. The Wait Time (VTAT) Correlation & Data Caveat
+Customer-cancelled rides feature an average driver arrival time of 12.5 minutes, compared to just 8.5 minutes for successfully completed rides. While there is a moderate positive correlation (r = 0.31) between longer wait times and higher cancellation rates, a critical data anomaly was identified:
+* **The Caveat:** The dataset artificially caps completed rides at a maximum VTAT of 15 minutes, while allowing cancelled rides to reach 20 minutes. Therefore, the 100% cancellation rate observed beyond the 15-minute mark is a structural artifact of the synthetic data, not a pure behavioral observation.
+* **Recommendation:** The general trend holds (longer waits = higher churn), but the specific "15-minute threshold" must be validated against live, unbounded operational data before deploying automated reassignment algorithms.
+
+### 3. Root Cause Analysis: 78% of Customer Churn is Fixable
+Of the 10,500 customer-initiated cancellations, only 22% were due to genuine user decisions (e.g., a change of plans). The remaining 78% (8,147 rides) stemmed from identifiable product, policy, or operational failures.
+* **The Breakdown:** The leading fixable causes were "Wrong Address" (2,362), "Driver Not Moving" (2,335), and "Driver Asked to Cancel" (2,295).
+* **Recommendation:** Prioritize a "Map Confirmation UX Fix." Because "Wrong Address" is the highest-volume fixable error, implementing a "Confirm Exact Pin" prompt before booking offers the quickest engineering build with the highest immediate revenue recovery.
+  
+<img width="1167" height="386" alt="week 7 customer" src="https://github.com/user-attachments/assets/7e4f37b4-b111-441a-b184-eed3d02e40d2" />
+
+*Above: A root-cause analysis of customer-initiated cancellations. The breakdown shows that 78% of these cancellations stem from identifiable and fixable friction points—such as map UX issues ("Wrong Address") and driver behavior—rather than a genuine change in the user's travel plans.*
+
+---
+
+## Assumptions, Limitations & Potential Biases
+*This section provides critical context for the findings and should be reviewed before acting on any operational recommendations.*
+
+### 1. Key Analytical Assumptions
+* **Revenue Opportunity Estimates:** Cancelled rides lack a `Booking Value` because no fare was charged. Any revenue attached to lost rides (e.g., 27,000 × ₹508 = ₹13.7M) assumes that cancelled rides would have earned the same average as completed rides. This assumption may not hold if cancelled rides skew shorter or occur in lower-demand zones. Treat these figures as directional, not absolute.
+* **VTAT as a Booking-Time Signal:** The predictive model in Week 5 assumes `Avg VTAT` is available at the time of booking (as a dispatch estimate). If the dataset records the *actual* arrival time after the fact, using it would constitute data leakage. This requires confirmation from the data engineering team.
+* **Self-Reported Customer Reasons:** Customer cancellation reasons are selected from a dropdown menu. Customers often choose the nearest available option rather than the precise root cause (e.g., selecting "Wrong Address" for an unrelated issue). These categories provide useful directional signals, but not exact root cause counts.
+
+### 2. Data Limitations (Synthetic Artifacts)
+This dataset contains synthetic generation artifacts that limit real-world extrapolation:
+* **The VTAT Boundary Anomaly:** `Avg VTAT` is capped at exactly 15 minutes for completed rides but extends to 20 minutes for customer-cancelled rides. The observed "100% cancellation rate above 15 minutes" is a hard boundary created by the data generation process, not a true customer decision threshold.
+* **Uniform Distribution of Outcomes:** Both driver and customer cancellation reasons appear in almost exactly equal proportions (~25% and ~22% respectively). In live operational data, reasons rarely distribute this evenly, suggesting random uniform assignment rather than recorded human behavior.
+* **Retention Tracking:** The dataset contains 148,788 unique customers across 150,000 rides (a 99.2% one-time user rate). This is highly unrealistic for a ride-hailing platform and renders standard long-term cohort retention analysis uninformative.
+* **Missing External Context:** The data lacks external variables such as marketing campaigns, competitor pricing changes, driver demographics, or localized weather events. We can describe the patterns, but cannot definitively isolate external causes.
+
+### 3. Potential Biases
+* **Survivorship Bias in ARPR:** Average Revenue Per Ride (ARPR) is calculated strictly from completed rides. Rides that were cancelled may have possessed fundamentally different characteristics (e.g., shorter distances, specific vehicle types, specific times of day). Therefore, the ARPR from completed rides is not a perfectly neutral baseline for all 150,000 bookings.
+* **Reporting Bias:** Customers cancelling due to driver behavior (e.g., "Driver asked to cancel") may underreport this reason due to fear of retaliation or lack of trust in the platform's resolution process. The true count of policy violations is likely higher than recorded.
+* **Confirmation Bias in Recommendations:** Recommendations were generated by observing data patterns and reasoning backward to a logical fix. This is vulnerable to confirmation bias. Every recommendation (such as the Map Confirmation UX Fix) should be subjected to rigorous A/B testing or a localized pilot program before a full-scale platform rollout.
