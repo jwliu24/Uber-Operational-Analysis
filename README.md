@@ -1,19 +1,22 @@
 # Uber Operational Analysis Project
-> A data-driven deep dive into Uber's operational performance, focusing on supply reliability (VTAT) and cancellation trends. Includes a 30-day demand forecast and a vehicle reliability scorecard built with Python and SQL.
+
+**[Click here to view the Presentation Report](https://jwliu24.github.io/Uber-Operational-Analysis/uber_presentation_report.html)**
+
+> A data-driven deep dive into Uber's operational performance, translating UI friction and supply reliability (VTAT) into financial impact. This project uses Python, SQL, and Machine Learning (Logistic Regression) to identify systemic revenue leaks, predict customer churn thresholds, and recommend actionable product and pricing interventions.
 
 ## Project Overview
-* **Objective:** To identify bottlenecks in ride completion rates and vehicle turnaround times (VTAT) to improve platform reliability.
-* **Tech Stack:** Python (Pandas, Matplotlib, Seaborn, SciPy), SQL
+* **Objective:** To translate operational friction (cancellations and wait times) into financial impact, identifying systemic revenue leaks and optimizing pricing structures.
+* **Tech Stack:** Python (Pandas, Matplotlib, Seaborn, SciPy, Scikit-Learn), SQL
 * **Environment:** Jupyter Notebook / Google Colab
-* **Focus Areas:** Feature Engineering, Exploratory Data Analysis (EDA), Statistical Hypothesis Testing, Time-Series Forecasting
+* **Focus Areas:** Feature Engineering, Statistical Hypothesis Testing, Predictive Modeling (Logistic Regression), Revenue Valuation
 
 ---
 
 ## Executive Summary (TL;DR)
-* **The 62% Completion Bottleneck:** Funnel analysis revealed that out of every 100 rides requested, only 62 are successfully completed.
-* **The 'Smoking Gun' of Driver Churn:** Driver-initiated cancellations account for a massive 18% drop-off in the conversion funnel, causing nearly 3x more operational damage to the platform than customer-initiated cancellations.
-* **Root Cause Fixes:** 78% of customer-initiated cancellations stem from identifiable and fixable UX or operational friction points (e.g., "Wrong Address" or "Driver Not Moving"), offering immediate, high-ROI engineering opportunities.
-* **Data Empathy:** Advanced EDA revealed that the predictive machine learning models heavily indexed on synthetic data artifacts (like artificial wait-time caps), proving the necessity of bounding ML deployments with live operational context.
+* **The 62% Completion Bottleneck:** Funnel analysis revealed that out of every 100 rides requested, only 62 are successfully completed, exposing massive opportunities for revenue recovery.
+* **The $1.15M 'Auto' Leakage:** While premium vehicles are often assumed to drive the largest losses per ride, the high-frequency 'Auto' segment is the platform's most severe revenue leak, driven mathematically by a systemic "Wrong Address" UI bug.
+* **The Pricing Paradox:** Despite offering multiple vehicle tiers, the Average Revenue Per Ride (ARPR) remains completely flat at $508 across the board. The platform is currently exhibiting zero effective premiumization, leaving high-margin money on the table for XL and Premier tiers.
+* **Data Empathy & ML Constraints:** A Logistic Regression model (optimized for Recall) proved Wait Time drives 99.6% of customer churn power. However, deep EDA revealed this "15-minute revenue cliff" heavily indexes on synthetic data artifacts, proving the necessity of bounding ML deployments with live operational context.
 
 ---
 
